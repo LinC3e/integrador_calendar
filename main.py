@@ -16,7 +16,17 @@ class App(ttk.Frame):
         parent.title = "Calendar"
         parent.geometry("650x450")
         parent.config(bg="#242424")
-        parent.resizable(False, False)
+        parent.resizable(True, True)
+
+class Logo(ttk.Frame):
+    def __init__(self, parent, filename, size=None):
+        self.parent = parent
+        self.image = tk.PhotoImage(file=filename)
+        self.image = self.image.subsample(2, 2)
+        if size is not None:
+            self.image = self.image.zoom(size[0], size[0])
+        self.label = tk.Label(self.parent, image=self.image)
+        self.label.grid()
 
 
 class FechaFrame(ttk.Frame):
@@ -25,15 +35,27 @@ class FechaFrame(ttk.Frame):
 
         d = time.strftime('%H:%M:%S', time.localtime())
 
-        fecha = ttk.Label(self, text=datetime.date.today(), background="yellow")
-        fecha.grid(column=1, row=1, sticky=tk.N, padx=5, pady=5)
+        fecha = ttk.Label(
+            self,
+            text=datetime.date.today(), 
+            background="yellow", 
+            font=("Century Gothic", 17))
+        fecha.grid(column=1, row=1, sticky=tk.N, padx=275)
 
-        hora = ttk.Label(self, text=d, background="green")
+        hora = ttk.Label(
+            self, 
+            text=d, 
+            background="green",
+            font=("Century Gothic", 15)
+            )
         hora.grid(column=1, row=0, sticky=tk.N)
 
 
 
+
+
 root = tk.Tk()
+logo = Logo(root, "Mirai.png" , size=(1,0))
 App(root).grid()
-FechaFrame(root).grid()
+FechaFrame(root).grid(pady=0)
 root.mainloop()
