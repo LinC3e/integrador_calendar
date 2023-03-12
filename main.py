@@ -15,15 +15,8 @@ class App(ttk.Frame):
         parent.rowconfigure(0, weight=1) 
         parent.resizable(False, False)
 
-        self.title = tk.StringVar
-        self.date = datetime.date.today()
-        self.time = time.strftime('%H:%M:%S', time.localtime())
-        self.duration = 1
-        self.description = ""
-        self.importance = "normal"
-        
+
         ttk.Button(self, text="Abrir ventana", command=self.crear_evento).grid()
-        
 
     def crear_evento(self):
 # creamos la ventana secundaria
@@ -31,18 +24,30 @@ class App(ttk.Frame):
         toplevel = tk.Toplevel(self.parent)
 # agregamos el frame (Secundaria) a la ventana (toplevel)
         CrearEvento(toplevel).grid()
-        
+
+
+class CalendarEvent:
+    def __init__(self, title, date, time, duration=1, description='', importance='normal'):
+        self.title = title
+        self.date = date
+        self.time = time
+        self.duration = duration
+        self.description = description
+        self.importance = importance
+
 
 
 class CrearEvento(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent, padding=(20))
         parent.title("Crear Evento") 
-        parent.geometry("350x100+180+100") 
-        self.grid(sticky=(tk.N, tk.S, tk.E, tk.W))
+        parent.geometry("300x600+180+100") 
+        self.grid(sticky=(tk.N, tk.S))
         parent.columnconfigure(0, weight=1) 
         parent.rowconfigure(0, weight=1) 
         parent.resizable(True, True) 
+
+        self.events = []
 
         self.title_label = tk.Label(self, text="Title:")
         self.title_label.grid()
@@ -96,7 +101,7 @@ class CrearEvento(ttk.Frame):
         duration = float(self.duration_entry.get())
         description = self.description_entry.get()
         importance = self.importance_var.get()
-        event = App(title, date, time, duration, description, importance)
+        event = CalendarEvent(title, date, time, duration, description, importance)
         self.events.append(event)
         self.event_list.insert(tk.END, event.title)
 
